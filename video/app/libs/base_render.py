@@ -1,5 +1,5 @@
 # coding:utf-8
-
+from django.template.context_processors import csrf
 from mako.lookup import TemplateLookup
 from django.template import RequestContext
 from django.conf import settings
@@ -32,8 +32,8 @@ def render_to_response(request, template, data=None):
     for d in context_instance:
         result.update(d)
 
-    result['csrf_token'] = ('<input type="hidden"' 
-                            ' name="csrfmiddlewaretoken" value={0}' 
-                            ' />'.format(request.META['CSRF_COOKIE']))
+    result['request'] = request
+    csrf_token = csrf(request)["csrf_token"]
+    result['csrf_token'] = '<input type="hidden" name="csrfmiddlewaretoken" value="{0}" />'.format(csrf_token, '')
     
     return HttpResponse(mako_template.render(**result))
