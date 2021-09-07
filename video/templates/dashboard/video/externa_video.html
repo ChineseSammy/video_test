@@ -69,6 +69,7 @@
         <th>创建时间</th>
         <th>更新时间</th>
         <th>状态</th>
+        <th>操作</th>
     </tr>
 
     </thead>
@@ -93,6 +94,7 @@
                 %>
                <td>${b}</td>
                <td>${i.status}</td>
+               <td><a href="">编辑</a> | <a href="${reverse('video_sub', kwargs={'video_id': i.id})}">附属信息</a></td>
             </tr>
         % endfor
     </tbody>
