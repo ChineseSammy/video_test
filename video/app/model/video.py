@@ -42,6 +42,14 @@ NationalityType.Korea.label = '韩国'
 NationalityType.America.label = '美国'
 NationalityType.other.label = '其他'
 
+class IdentityType(Enum):
+    main_star = "main_star"
+    other_star = "other_star"
+    director = "director"
+
+IdentityType.main_star.label = "主演"
+IdentityType.other_star.label = "配角"
+IdentityType.director.label = "导演"
 
 class Video(models.Model):
     name = models.CharField(max_length=100, null=True)
