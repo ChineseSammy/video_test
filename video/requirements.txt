@@ -1,2 +1,7 @@
 django==2.1.2
 mako
+qiniu
+celery
+django-celery
+celery-with-redis
+redis==2.10.6

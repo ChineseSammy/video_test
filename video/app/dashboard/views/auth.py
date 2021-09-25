@@ -83,7 +83,6 @@ class AdminManager(View):
 class UpdateAdminStatus(View):
 
     def get(self, request):
-
         status = request.GET.get('status', 'on')
         _status = True if status == 'on' else False
         request.user.is_superuser = _status
