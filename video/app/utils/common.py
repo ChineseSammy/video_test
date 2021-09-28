@@ -2,7 +2,7 @@
 
 import os, time, shutil
 from django.conf import settings
-from app.libs.base_qiniu import video_qiniu
+from app.tasks.task import video_task
 from app.models import Video, VideoSub
 
 
@@ -37,28 +37,13 @@ def handle_video(video_file, video_id, number):
     out_path = '/'.join([out_path, out_name])
 
     command = 'ffmpeg -i {} -c copy {}.mp4'.format(path_name, out_path)
-    os.system(command)
 
-    out_name = '.'.join([out_path, 'mp4'])
-    if not os.path.exists(out_name):
-        remove_path([out_name, path_name])
-        return False
+    video = Video.objects.get(pk=video_id)
+    video_sub = VideoSub.objects.create(
+        video=video,
+        url='',
+        number=number
+    )
+    video_task.delay(command, out_path, path_name, video_file.name, video_sub.id)
 
-    url = video_qiniu.put(video_file.name, out_name)
-
-    if url:
-        video = Video.objects.get(pk=video_id)
-
-        try:
-            VideoSub.objects.create(
-                video=video,
-                url=url,
-                number=number
-            )
-            return True
-        except:
-            return False
-        finally:
-            remove_path([out_name, path_name])
-    remove_path([out_name, path_name])
     return False

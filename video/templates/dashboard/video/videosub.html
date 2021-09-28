@@ -52,7 +52,11 @@
         % for i in video.video_sub.all():
             <tr>
                <td>第${i.number}集</td>
+                % if FromType(video.from_to) == FromType.custom:
+                <td><p class="info">${i.url or 'waiting...'}</p></td>
+                % else:
                 <td><p class="info">${i.url}</p></td>
+                    % endif
                <td>
                    <a href="${i.url}" class="btn btn-default" target="_blank">观看</a>
                    <button class="update-btn btn btn-default" data-id="${i.id}" data-url="${i.url}" data-number="${i.number}">编辑</button>
