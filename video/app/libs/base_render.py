@@ -34,6 +34,7 @@ def render_to_response(request, template, data=None):
 
     result['request'] = request
     csrf_token = csrf(request)["csrf_token"]
-    result['csrf_token'] = '<input type="hidden" name="csrfmiddlewaretoken" value="{0}" />'.format(csrf_token, '')
+    result['csrf_token'] = '<input type="hidden" id="django-csrf-token" name="csrfmiddlewaretoken" value="{0}" />'.format(csrf_token, '')
+    # result['csrf_token'] = ('<input type="hidden" id="django-csrf-token" name="csrfmiddlewaretoken" value="{0}" />'.format(request.META['CSRF_COOKIE']))
     
     return HttpResponse(mako_template.render(**result))

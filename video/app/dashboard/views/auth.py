@@ -1,11 +1,13 @@
 # coding:utf-8
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
+from django.http import JsonResponse
 from django.shortcuts import redirect, reverse
 from django.views.generic import View
 from django.core.paginator import Paginator
 from app.libs.base_render import render_to_response
 from app.utils.permission import dashboard_auth
+from app.models import ClientUser
 
 
 class Login(View):
@@ -89,3 +91,24 @@ class UpdateAdminStatus(View):
         request.user.save()
 
         return redirect(reverse('admin_manager'))
+
+
+class ClientManger(View):
+    TEMPLATE = 'dashboard/auth/client_user.html'
+
+    def get(self, request):
+
+        users = ClientUser.objects.all()
+
+        data = {'users': users}
+
+        return render_to_response(request, self.TEMPLATE, data=data)
+
+    def post(self, request):
+
+        user_id = request.POST.get('userId')
+        user = ClientUser.objects.get(pk=user_id)
+
+        user.update_status()
+
+        return JsonResponse({'code': 0, 'msg': 'success'})

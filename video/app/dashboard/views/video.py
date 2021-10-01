@@ -7,6 +7,7 @@ from app.utils.permission import dashboard_auth
 from app.utils.common import check_and_get_video_type, handle_video
 from app.model.video import \
     (VideoType, FromType, NationalityType, IdentityType, Video, VideoSub, VideoStar)
+from app.models import Comment
 
 
 class ExternaVideo(View):
@@ -94,8 +95,11 @@ class VideoSubView(View):
         video = Video.objects.get(pk=video_id)
         error = request.GET.get('error', '')
 
+        comments = Comment.objects.filter(video=video).order_by('-id')
+
         data['video'] = video
         data['error'] = error
+        data['comments'] = comments
 
         return render_to_response(request, self.TEMPLATE, data)
 
